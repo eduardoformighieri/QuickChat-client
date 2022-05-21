@@ -1,11 +1,17 @@
 import { Flex } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect , useRef } from "react";
 
-export const ScrollAlwaysBottom = ({children}: any) => {
-  const divRef = useRef<any>(null);
+type ScrollAlwaysBottomProps = {
+  children: React.ReactNode; // best, accepts everything (see edge case below)
+}
 
-  useEffect(() => {
-    divRef.current.scrollIntoView({ behavior: 'instant' });
+export const ScrollAlwaysBottom = ({children}: ScrollAlwaysBottomProps) => {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect (() => {
+    if (null !== divRef.current) {
+      divRef.current.scrollIntoView({ behavior: 'auto' });
+    }
   });
 
   return (

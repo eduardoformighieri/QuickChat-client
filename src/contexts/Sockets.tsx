@@ -8,19 +8,30 @@ import {
 } from 'react';
 
 import { io } from "socket.io-client";
+import { message } from '../types';
 const socket = io("http://localhost:3333")
 
 
-
-type SocketsContextTypes = {
-  messages: any;
-  handleSubmitNewMessage: any;
+type SocketsProviderProps = {
+  children: React.ReactNode;
 }
 
-const SocketsContext = createContext<any>(
+
+type SocketsContextTypes = {
+  messages: message[];
+  handleSubmitNewMessage: (message: string) => void;
+  handleJoining: (values: { username: string, chatName: string}) => void;
+  chatName: string | null;
+  user: string | null;
+}
+
+const SocketsContext = createContext<SocketsContextTypes>(
   {
-    messages: null,
-    handleSubmitNewMessage: null,
+    messages: [],
+    handleSubmitNewMessage: () => {},
+    handleJoining: () => {},
+    chatName: '',
+    user: '',
   }
 );
 
@@ -34,7 +45,7 @@ socket.on("custom error", (error) => {
 });
 
 
-export function SocketsProvider({ children }: any) {
+export function SocketsProvider({ children }: SocketsProviderProps) {
   const [newMessageReceived, setNewMessageReceived] = useState(false)
   const [messages, setMessages] = useState([])
   const [user, setUser] = useState(localStorage.getItem('user'))
@@ -42,7 +53,7 @@ export function SocketsProvider({ children }: any) {
 
   socket.on('messageStored', () => setNewMessageReceived(!newMessageReceived))
 
-  const handleJoining = useCallback((values: any) => {
+  const handleJoining = useCallback((values: { username: string, chatName: string}) => {
     fetch('http://localhost:3333/chat', {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
@@ -59,8 +70,8 @@ export function SocketsProvider({ children }: any) {
     setChatName(values.chatName)
   }, [])
 
-  const handleSubmitNewMessage = useCallback((inputValue) => {
-    socket.emit('message', { chatName: chatName, author: user, content: inputValue })
+  const handleSubmitNewMessage = useCallback((message: string) => {
+    socket.emit('message', { chatName: chatName, author: user, content: message })
   }, [chatName, user]);
 
   useEffect(() => {
@@ -74,7 +85,7 @@ export function SocketsProvider({ children }: any) {
 
 
 
-  const providerValue: any = useMemo(
+  const providerValue = useMemo(
     () => ({
       messages,
       handleSubmitNewMessage,
