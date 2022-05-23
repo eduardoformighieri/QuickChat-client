@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { io } from "socket.io-client";
 import { message } from '../types';
@@ -51,23 +52,37 @@ export function SocketsProvider({ children }: SocketsProviderProps) {
   const [user, setUser] = useState(localStorage.getItem('user'))
   const [chatName, setChatName] = useState(localStorage.getItem('chatName'))
 
+  const navigate = useNavigate();
+
   socket.on('messageStored', () => setNewMessageReceived(!newMessageReceived))
 
-  const handleJoining = useCallback((values: { username: string, chatName: string}) => {
-    fetch('http://localhost:3333/chat', {
+  const handleJoining = useCallback((values: { username: string, chatName: string }) => {
+
+    try {
+      fetch('http://localhost:3333/chat', {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         name: values.chatName
       })
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-
-    localStorage.setItem('user', values.username)
-    localStorage.setItem('chatName', values.chatName)
-    setUser(values.username)
-    setChatName(values.chatName)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } throw new Error('Request error');
+      })
+      .then((responseJson) => console.log(responseJson))
+      .catch((error) => {
+        alert(error)
+        navigate('/');
+      });
+      localStorage.setItem('user', values.username)
+      localStorage.setItem('chatName', values.chatName)
+      setUser(values.username)
+      setChatName(values.chatName)
+    }catch (error) {
+      alert(error)
+    }
   }, [])
 
   const handleSubmitNewMessage = useCallback((message: string) => {

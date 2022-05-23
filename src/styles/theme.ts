@@ -11,8 +11,13 @@ export const theme = extendTheme({
         color: 'gray.50',
       },
       button: {
-        all: 'unset',
-        cursor: 'pointer'
+        background: 'none',
+        color: 'inherit',
+        border: 'none',
+        padding: 0,
+        font: 'inherit',
+        cursor: 'pointer',
+        outline: 'inherit',
       }
     },
   },

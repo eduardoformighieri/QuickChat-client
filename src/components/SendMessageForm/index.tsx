@@ -27,6 +27,7 @@ export default function SendMessageForm() {
           defaultValue=""
           render={({ field }) =>
           <Input {...field}
+          autoComplete="off"
           bg='#030D17'
           p='4'
           m='4'
@@ -34,15 +35,7 @@ export default function SendMessageForm() {
           _placeholder={{ opacity: 1, color: 'gray.100' }}
           variant='unstyled' />}
         />
-        <button type="submit" style={{
-        background: 'none',
-        color: 'inherit',
-        border: 'none',
-        padding: 0,
-        font: 'inherit',
-        cursor: 'pointer',
-        outline: 'inherit',
-        }}>
+        <button type="submit">
           <Flex mr='4'>
            <MdSend size={24} color='gray.200' />
           </Flex>

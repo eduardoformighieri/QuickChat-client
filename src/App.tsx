@@ -14,14 +14,14 @@ import {
 } from "react-router-dom";
 
 export const App = () => (
-  <SocketsProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <SocketsProvider>
       <ChakraProvider theme={theme}>
         <Routes>
           <Route path="/" element={<StartForm />} />
             <Route path="/chats" element={<Chats />} />
         </Routes>
       </ChakraProvider>
-    </BrowserRouter>
-  </SocketsProvider>
+    </SocketsProvider>
+  </BrowserRouter>
   )
