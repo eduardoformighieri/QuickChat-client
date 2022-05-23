@@ -25,7 +25,7 @@ export const ScrollAlwaysBottom = ({children}: ScrollAlwaysBottomProps) => {
       '&::-webkit-scrollbar-thumb': {
         background: 'rgba(255,255,255,0.1)',
       },
-    }}  h={600} flexDir='column' overflowY='auto'>
+    }}  h='auto' flexDir='column' overflowY='auto'>
       {children}
       <div ref={divRef} />
     </Flex>);

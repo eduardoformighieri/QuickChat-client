@@ -17,6 +17,8 @@ import { MessageBox } from "../../components/MessageBox";
 import { ScrollAlwaysBottom } from "../../components/ScrollAlwaysBottom";
 import { useSockets } from "../../contexts/Sockets";
 
+import { AiOutlineArrowLeft } from "react-icons/ai";
+
 import { message } from '../../types'
 
 import { useNavigate } from 'react-router-dom';
@@ -40,19 +42,25 @@ export const Chats = () => {
     return date.toLocaleString("pt-BR")
   }
 
+  function leaveChat() {
+    localStorage.clear()
+    navigate('/')
+  }
+
   return (
-  <Flex  justify='center'>
-    <Box w={1000} bg='#061B2E' >
-      <Box bg='gray.500'  p='4' >
-        <Text color='gray.200' fontWeight='bold' fontSize='xl'>{chatName}</Text>
-      </Box>
+  <Flex justify='center' h='100vh'>
+    <Flex flexDirection='column' w={1000} bg='#061B2E' >
+      <Flex alignItems='center' borderBottomWidth={1} borderColor='gray.700'  p='4' >
+        <button onClick={leaveChat}><AiOutlineArrowLeft color="white" size={24} /></button>
+        <Text ml="4" color='gray.200' fontWeight='bold' fontSize='3xl'>{chatName}</Text>
+      </Flex>
       <ScrollAlwaysBottom >
         {messages.map((message: message) => <MessageBox key={message.author + message.createdAt} isOwnMessage={user === message.author} username={message.author} message={message.content} time={dateFormatter(message.createdAt)} />)}
       </ScrollAlwaysBottom>
-      <Flex>
+      <Flex mt='auto'>
         <SendMessageForm />
       </Flex>
-    </Box>
+    </Flex>
   </Flex>
 )
 }
