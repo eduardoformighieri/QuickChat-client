@@ -10,7 +10,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { io } from "socket.io-client";
 import { message } from '../types';
-const socket = io("http://localhost:3333")
+import {API_URL} from '../utils/api'
+
+
+const socket = io(API_URL!)
 
 
 type SocketsProviderProps = {
@@ -59,7 +62,7 @@ export function SocketsProvider({ children }: SocketsProviderProps) {
   const handleJoining = useCallback((values: { username: string, chatName: string }) => {
 
     try {
-      fetch('http://localhost:3333/chat', {
+      fetch(`${API_URL}/chat`, {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -91,7 +94,7 @@ export function SocketsProvider({ children }: SocketsProviderProps) {
 
   useEffect(() => {
     async function fetchData () {
-      fetch(`http://localhost:3333/chat/${chatName}`)
+      fetch(`${API_URL}/chat/${chatName}`)
         .then((response) => response.json())
         .then((data) => setMessages(data.messages))
     }
